@@ -59,12 +59,12 @@
         </div>
       </nav>
 
-      <header class="display-4 my-4">Bài tập javascript - axios</header>
+      <header class="display-4 my-4 text-primary font-weight-bold">Quản lý sản phẩm</header>
       <!-- Phan tab menu -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a
-            class="nav-link active"
+            class="nav-link active font-weight-bold"
             href="#DanhSachSP"
             role="tab"
             data-toggle="tab"
@@ -115,15 +115,16 @@
           <div class="tblSanPham" id="tblSanPham">
             <!-- BEGIN TABLE SẢN PHẨM -->
             <table class="table table-bordered text-center">
-              <thead>
+              <thead class="text-info">
                 <th>STT</th>
                 <th>Tên Sản Phẩm</th>
                 <th>Giá</th>
-                <th>Hình Ảnh</th>
                 <th>Màn hình</th>
                 <th>Camera sau</th>
                 <th>Camera trước</th>
+                <th>Hình Ảnh</th>
                 <th>Mô Tả</th>
+                <th>Loại</th>
                 <th>Action</th>
               </thead>
               <tbody id="tblDanhSachSP"></tbody>
@@ -152,7 +153,6 @@
             <div class="modal-body">
               <!-- Dùng input hidden để lưu id khi muốn cập nhật -->
               <input type="text" id="MaSP" hidden />
-
               <div class="form-group">
                 <label>Tên Sản Phẩm</label>
                 <input
@@ -167,14 +167,6 @@
                   id="GiaSP"
                   class="form-control"
                   placeholder="Nhập vào giá"
-                />
-              </div>
-              <div class="form-group">
-                <label>Hình Ảnh</label>
-                <input
-                  id="HinhSP"
-                  class="form-control"
-                  placeholder="Nhập vào hình sản phẩm"
                 />
               </div>
               <div class="form-group">
@@ -202,13 +194,28 @@
                 />
               </div>
               <div class="form-group">
+                <label>Hình Ảnh</label>
+                <input
+                  id="HinhSP"
+                  class="form-control"
+                  placeholder="Nhập vào hình sản phẩm"
+                />
+              </div>
+              <div class="form-group">
                 <label for="">Mô tả: </label>
                 <input
                   id="MoTaSP"
                   class="form-control"
                   placeholder="Nhập vào mô tả sản phẩm"
                 />
-                
+              </div>
+              <div class="form-group">
+                <label>Loại Sản Phẩm</label>
+                <input
+                  id="LoaiSP"
+                  class="form-control"
+                  placeholder="Nhập vào loại sản phẩm"
+                />
               </div>
             </div>
             <!-- Modal footer -->
