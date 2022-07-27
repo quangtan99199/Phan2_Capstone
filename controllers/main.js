@@ -1,20 +1,13 @@
-// Cần call API để lấy danh sách sản phẩm và hiển thị ra giao diện
-
-// Hàm main sẽ được chạy khi ứng dụng được khởi chạy
 main();
 
 function main() {
   // B1: Gọi API lấy danh sách sản phẩm
 
-//================// axios({
-//   // B1: Gọi API lấy danh sách sản phẩm
-//   url: "https://62a55b15430ba53411c5bc09.mockapi.io/api/products",
-//   method: "GET",
-// }).then(function(result))     =================
-
-  apiGetProducts().then(function (result) {
+  apiGetProducts().then( (result) => {
     // Tạo biến products nhận kết quả trả về từ API
     var products = result.data;
+    console.log(result)
+    console.log(result.data)
     // Sau khi đã lấy được data từ API thành công
     // Duyệt mảng data và khởi tạo các đối tượng Product
     for (var i = 0; i < products.length; i++) {
@@ -30,7 +23,7 @@ function main() {
         product.desc
       );
     }
-    // Gọi hàm display để hiển thị danh sách sản phẩm ra giao diện
+  console.log(products)    // Gọi hàm display để hiển thị danh sách sản phẩm ra giao diện
     display(products);
   });
 }
@@ -48,8 +41,8 @@ function display(products) {
           <img src="${product.img}" width="70px" height="70px" />
         </td>
         <td>${product.screen}</td>
-        <td>${product.frontCamera}</td>
         <td>${product.backCamera}</td>
+        <td>${product.frontCamera}</td>
         <td>${product.desc}</td>
         <td>
           <button
@@ -82,9 +75,21 @@ function addProduct() {
   var name = document.getElementById("TenSP").value;
   var price = document.getElementById("GiaSP").value;
   var img = document.getElementById("HinhSP").value;
+  var screen = document.getElementById("ManSP").value;
+  var backCamera = document.getElementById("CamSauSP").value;
+  var frontCamera = document.getElementById("CamTruocSP").value;
   var desc = document.getElementById("MoTaSP").value;
   // B2: Khởi tạo đối tượng Product
-  var product = new Product(null, name, price, img, desc);
+  var product = new Product(
+    null,
+    name,
+    price,
+    img,
+    screen,
+    backCamera,
+    frontCamera,
+    desc
+  );
   // B3: Gọi API thêm sản phẩm
 
   apiAddProduct(product)
@@ -103,6 +108,8 @@ function addProduct() {
 function deleteProduct(productId) {
   apiDeleteProduct(productId)
     .then(function () {
+      console.log(productId);
+
       // Xoá thành công
       main();
     })
@@ -118,10 +125,22 @@ function updateProduct() {
   var name = document.getElementById("TenSP").value;
   var price = document.getElementById("GiaSP").value;
   var img = document.getElementById("HinhSP").value;
+  var screen = document.getElementById("ManSP").value;
+  var backCamera = document.getElementById("CamSauSP").value;
+  var frontCamera = document.getElementById("CamTruocSP").value;
   var desc = document.getElementById("MoTaSP").value;
 
   // B2: Khởi tạo đối tượng Product
-  var product = new Product(id, name, price, img, desc);
+  var product = new Product(
+    id,
+    name,
+    price,
+    img,
+    screen,
+    backCamera,
+    frontCamera,
+    desc
+  );
 
   // B3: Gọi API cập nhật sản phẩm
   apiUpdateProduct(product)
@@ -141,6 +160,9 @@ function resetForm() {
   document.getElementById("MaSP").value = "";
   document.getElementById("TenSP").value = "";
   document.getElementById("GiaSP").value = "";
+  document.getElementById("ManSP").value;
+  document.getElementById("CamSauSP").value;
+  document.getElementById("CamTruocSP").value;
   document.getElementById("MoTaSP").value = "";
 
   // Đóng modal (vì sử dụng bootstrap nên phải tuân theo cách làm của nó)
@@ -200,6 +222,7 @@ function handleProductAction(event) {
 
   switch (type) {
     case "delete":
+      console.log(id);
       deleteProduct(id);
       break;
     case "update": {
@@ -241,6 +264,9 @@ function showUpdateModal(productId) {
       document.getElementById("TenSP").value = product.name;
       document.getElementById("GiaSP").value = product.price;
       document.getElementById("HinhSP").value = product.img;
+      document.getElementById("ManSP").value = product.screen;
+      document.getElementById("CamSauSP").value = product.backCamera;
+      document.getElementById("CamTruocSP").value = product.frontCamera;
       document.getElementById("MoTaSP").value = product.desc;
     })
     .catch(function (error) {
@@ -269,6 +295,9 @@ function handleSearch(evt) {
         product.name,
         product.price,
         product.img,
+        product.screen,
+        product.backCamera,
+        product.frontCamera,
         product.desc
       );
     }
