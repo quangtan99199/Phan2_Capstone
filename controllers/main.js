@@ -1,5 +1,3 @@
-main();
-
 function main() {
   // B1: Gọi API lấy danh sách sản phẩm
 
@@ -28,6 +26,7 @@ function main() {
     display(products);
   });
 }
+main();
 
 function display(products) {
   var html = "";
@@ -74,16 +73,17 @@ function display(products) {
 // Hàm xử lý gọi API thêm sản phẩm
 function addProduct() {
   // B1: DOM lấy value
-  var name = document.getElementById("TenSP").value;
-  var price = document.getElementById("GiaSP").value;
-  var screen = document.getElementById("ManSP").value;
-  var backCamera = document.getElementById("CamSauSP").value;
-  var frontCamera = document.getElementById("CamTruocSP").value;
-  var img = document.getElementById("HinhSP").value;
-  var desc = document.getElementById("MoTaSP").value;
-  var type = document.getElementById("LoaiSP").value;
+  const name = document.getElementById("TenSP").value;
+  const price = document.getElementById("GiaSP").value;
+  const screen = document.getElementById("ManSP").value;
+  const backCamera = document.getElementById("CamSauSP").value;
+  const frontCamera = document.getElementById("CamTruocSP").value;
+  const img = document.getElementById("HinhSP").value;
+  const desc = document.getElementById("MoTaSP").value;
+  const type = document.getElementById("LoaiSP").value;
+
   // B2: Khởi tạo đối tượng Product
-  var product = new Product(
+  let product = new Product(
     null,
     name,
     price,
@@ -94,18 +94,21 @@ function addProduct() {
     desc,
     type
   );
+  console.log("product", product);
   // B3: Gọi API thêm sản phẩm
-
-  apiAddProduct(product)
-    .then(function (result) {
-      // Thêm thành công, tuy nhiên lúc này dữ liệu chỉ mới được thay đổi ở phía server
-      // Gọi tới hàm main để call API get products và hiển thị ra giao diện
-      main();
-      resetForm();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  validationAdd(product);
+  if (validationAdd(product) !== false) {
+    apiAddProduct(product)
+      .then(function (result) {
+        // Thêm thành công, tuy nhiên lúc này dữ liệu chỉ mới được thay đổi ở phía server
+        // Gọi tới hàm main để call API get products và hiển thị ra giao diện
+        main();
+        resetForm();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 }
 
 // Hàm xử lý gọi API xoá sản phẩm
@@ -135,6 +138,12 @@ function updateProduct() {
   var desc = document.getElementById("MoTaSP").value;
   var type = document.getElementById("LoaiSP").value;
 
+  // var isValid = validation();
+
+  // if (!isValid) {
+  //   alert("Vui lòng nhập vào các giá trị");
+  //   return;
+
   // B2: Khởi tạo đối tượng Product
   var product = new Product(
     id,
@@ -149,17 +158,19 @@ function updateProduct() {
   );
 
   // B3: Gọi API cập nhật sản phẩm
-  apiUpdateProduct(product)
-    .then(function (result) {
-      // Cập nhật thành công, dữ liệu chỉ mới thay đổi ở phía server, cần gọi lại API getProducts và hiển thị lại giao diện (đã làm trong hàm main)
-      main();
-      resetForm();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  validationAdd(product);
+  if (validationAdd(product) !== false) {
+    apiUpdateProduct(product)
+      .then(function (result) {
+        // Cập nhật thành công, dữ liệu chỉ mới thay đổi ở phía server, cần gọi lại API getProducts và hiển thị lại giao diện (đã làm trong hàm main)
+        main();
+        resetForm();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 }
-
 // Hàm xử lý reset form và đóng modal
 function resetForm() {
   // Reset form
@@ -172,7 +183,6 @@ function resetForm() {
   document.getElementById("HinhSP").value = "";
   document.getElementById("MoTaSP").value = "";
   document.getElementById("LoaiSP").value = "";
-
 
   // Đóng modal (vì sử dụng bootstrap nên phải tuân theo cách làm của nó)
   $("#myModal").modal("hide");
@@ -208,6 +218,7 @@ function handleSubmit(event) {
 
   switch (type) {
     case "add":
+      console.log("add case");
       addProduct();
       break;
     case "update":
@@ -317,4 +328,96 @@ function handleSearch(evt) {
     // Gọi hàm display để hiển thị danh sách sản phẩm ra giao diện
     display(products);
   });
+}
+
+//===================================
+function validationAdd() {
+  const id = document.getElementById("MaSP").value;
+  const name = document.getElementById("TenSP").value;
+  const price = document.getElementById("GiaSP").value;
+  const screen = document.getElementById("ManSP").value;
+  const backCamera = document.getElementById("CamSauSP").value;
+  const frontCamera = document.getElementById("CamTruocSP").value;
+  const img = document.getElementById("HinhSP").value;
+  const desc = document.getElementById("MoTaSP").value;
+  const type = document.getElementById("LoaiSP").value;
+
+  let isValid = true;
+  const letters = new RegExp("^[A-Za-z]+$");
+  if (!isRequired(name)) {
+    isValid = false;
+    document.getElementById("spanTenSP").innerHTML =
+      "Tên sản phẩm không được để trống";
+  
+  }
+
+  const Gialetters = new RegExp("^[0-9]+$");
+  if (!isRequired(price)) {
+    isValid = false;
+    document.getElementById("spanGiaSP").innerHTML =
+      "Giá sản phẩm không được để trống";
+  }
+ 
+  const Loailetters = new RegExp("^[A-Za-z]+$");
+  if (!isRequired(type)) {
+    isValid = false;
+    document.getElementById("spanLoaiSP").innerHTML =
+      "Loại sản phẩm không được để trống";
+  }
+
+  const MoTaletters = new RegExp("^[A-Za-z]+$");
+  if (!isRequired(desc)) {
+    isValid = false;
+    document.getElementById("spanMoTaSP").innerHTML =
+      "Mô tả sản phẩm không được để trống";
+  }
+
+  const Manletters = new RegExp("^[A-Za-z]+$");
+  if (!isRequired(screen)) {
+    isValid = false;
+    document.getElementById("spanManSP").innerHTML =
+      "Kích thước sản phẩm không được để trống";
+  }
+
+  const CamSauletters = new RegExp("^[A-Za-z]+$");
+  if (!isRequired(backCamera)) {
+    isValid = false;
+    document.getElementById("spanCamSauSP").innerHTML =
+      "Camera sau không được để trống";
+  }
+
+  const CamTruocletters = new RegExp("^[A-Za-z]+$");
+  if (!isRequired(frontCamera)) {
+    isValid = false;
+    document.getElementById("spanCamTruocSP").innerHTML =
+      "Camera trước không được để trống";
+  }
+
+  const Hinhletters = new RegExp("^[A-Za-z]+$");
+  if (!isRequired(img)) {
+    isValid = false;
+    document.getElementById("spanHinhSP").innerHTML =
+      "Hình sản phẩm không được để trống";
+  }
+
+  return isValid;
+
+  
+}
+
+// Hàm kiểm tra input có rỗng hay không
+function isRequired(value) {
+  if (!value) {
+    return false;
+  }
+
+  return true;
+}
+// Hàm kiểm tra input có đủ độ dài hay không
+function minLength(value, limit) {
+  if (value.length < limit) {
+    return false;
+  }
+
+  return true;
 }
